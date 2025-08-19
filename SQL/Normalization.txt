@@ -1,0 +1,142 @@
+Normalization is a systematic process in relational databases used to minimize data redundancy and ensure data integrity. It involves organizing data into tables in such a way that dependencies are properly enforced by database structure.
+
+Key Normalization Processes (Normal Forms)
+First Normal Form (1NF)
+Objective: Eliminate repeating groups and ensure atomicity (each field holds only one value).
+
+Example:
+✅ Phone: 1234567890
+❌ Phone: 1234567890, 0987654321
+
+Second Normal Form (2NF)
+Objective: Remove partial dependencies (non-key attributes should depend on the whole primary key).
+
+Applies to: Tables with composite primary keys.
+
+Example: Move attributes that depend only on part of a composite key to a separate table.
+
+Third Normal Form (3NF)
+Objective: Remove transitive dependencies (non-key attributes should not depend on other non-key attributes).
+
+Example: If Student -> Department and Department -> HOD, then HOD should be moved to a separate table.
+
+Boyce-Codd Normal Form (BCNF)
+Objective: Stronger version of 3NF where every determinant is a candidate key.
+
+Fixes anomalies not handled by 3NF.
+
+Higher Normal Forms (4NF, 5NF, etc.)
+Deal with multi-valued dependencies, join dependencies, and other complex relationships. Rarely used in practice unless dealing with complex data models.
+
+Importance of Normalization
+✅ Reduces Data Redundancy
+
+Prevents storing the same data in multiple places (e.g., department name in every student record).
+
+✅ Improves Data Integrity
+
+Changes only need to be made in one place, reducing the risk of inconsistent data.
+
+✅ Easier Data Maintenance
+
+Clean, modular structure makes updates and deletions easier and safer.
+
+✅ Optimizes Storage
+
+Saves disk space by eliminating duplication.
+
+✅ Improves Query Accuracy
+
+Well-structured tables lead to more predictable and accurate query results.
+
+When Not to Normalize Fully
+In some real-world systems (especially in data warehousing or read-heavy applications), denormalization might be used to improve performance by reducing the number of joins required in queries.
+
+
+------------------------------------------------------------------------------------------------------
+
+🧱 Step 0: Unnormalized Table (UNF)
+OrgName	DeptName	EmpNames
+NetSrishti	HR	Alice, Bob
+NetSrishti	IT	Charlie, David
+TechNova	Finance	Eve
+TechNova	HR	Frank, Grace
+
+🔴 Problems:
+
+EmpNames column has repeating values.
+
+Data is not atomic, and there is redundancy in OrgName and DeptName.
+
+✅ Step 1: First Normal Form (1NF)
+OrgName	DeptName	EmpName
+NetSrishti	HR	Alice
+NetSrishti	HR	Bob
+NetSrishti	IT	Charlie
+NetSrishti	IT	David
+TechNova	Finance	Eve
+TechNova	HR	Frank
+TechNova	HR	Grace
+
+✅ Fixes applied:
+
+Each field contains atomic values.
+
+One row per employee.
+
+✅ Step 2: Second Normal Form (2NF)
+➡️ Break into separate tables to remove partial dependencies:
+
+1. Organizations Table
+OrgID	OrgName
+1	NetSrishti
+2	TechNova
+
+2. Departments Table
+DeptID	DeptName	OrgID
+1	HR	1
+2	IT	1
+3	Finance	2
+4	HR	2
+
+3. Employees Table
+EmpID	EmpName	DeptID
+1	Alice	1
+2	Bob	1
+3	Charlie	2
+4	David	2
+5	Eve	3
+6	Frank	4
+7	Grace	4
+
+✅ Fixes applied:
+
+Partial dependencies (e.g., OrgName depending only on OrgID) are removed.
+
+Each non-key field depends on the whole primary key.
+
+✅ Step 3: Third Normal Form (3NF)
+At this stage, we check for transitive dependencies.
+
+All fields in all tables depend only on the primary key — no derived or inferred attributes like "OrgLocation" in the Employees table.
+So, this structure already meets 3NF.
+
+🔍 Summary of Tables
+Organizations
+OrgID (PK), OrgName
+
+Departments
+DeptID (PK), DeptName, OrgID (FK)
+
+Employees
+EmpID (PK), EmpName, DeptID (FK)
+
+✅ Benefits of This Normalization
+🔄 Avoids duplication of organization and department names.
+
+🧩 Allows modular changes — e.g., renaming a department once instead of in every employee row.
+
+🔐 Maintains data consistency and integrity.
+
+📈 Scales well with large datasets.
+

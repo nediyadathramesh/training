@@ -1,0 +1,57 @@
+CREATE TRIGGER trg_AfterInsert_Employees
+ON Employees
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO EmployeeAudit (EmployeeID, Action, ActionDate)
+    SELECT EmployeeID, 'INSERT', GETDATE()
+    FROM inserted;
+END;
+
+CREATE TRIGGER trg_BeforeInsert_Customers
+BEFORE INSERT ON Customers
+FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT 1 FROM Customers WHERE Email = NEW.Email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Duplicate email is not allowed';
+    END IF;
+END;
+
+CREATE TRIGGER trg_AfterUpdate_Salary
+ON Employees
+AFTER UPDATE
+AS
+BEGIN
+    INSERT INTO SalaryHistory (EmployeeID, OldSalary, NewSalary, ChangedOn)
+    SELECT i.EmployeeID, d.Salary, i.Salary, GETDATE()
+    FROM inserted i
+    JOIN deleted d ON i.EmployeeID = d.EmployeeID
+    WHERE i.Salary <> d.Salary;
+END;
+
+CREATE TRIGGER trg_AfterDelete_Orders
+ON Orders
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO OrdersArchive
+    SELECT * FROM deleted;
+END;
+
+CREATE TRIGGER trg_PreventVIPDelete
+ON Customers
+INSTEAD OF DELETE
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM deleted WHERE IsVIP = 1)
+    BEGIN
+        RAISERROR ('Cannot delete VIP customers', 16, 1);
+    END
+    ELSE
+    BEGIN
+        DELETE FROM Customers
+        WHERE CustomerID IN (SELECT CustomerID FROM deleted);
+    END
+END;
+

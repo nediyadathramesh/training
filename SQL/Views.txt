@@ -1,0 +1,41 @@
+Basic View
+CREATE VIEW vw_EmployeeNames AS
+SELECT FirstName, LastName
+FROM Employees;
+
+Where clause
+CREATE VIEW vw_ActiveCustomers AS
+SELECT CustomerID, Name, Email
+FROM Customers
+WHERE IsActive = 1;
+
+View with join
+CREATE VIEW vw_EmployeeDepartments AS
+SELECT e.EmployeeID, e.FirstName, e.LastName, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DepartmentId = d.DepartmentId;
+
+Aggregate view
+CREATE VIEW vw_TotalOrdersPerCustomer AS
+SELECT CustomerID, COUNT(OrderID) AS TotalOrders
+FROM Orders
+GROUP BY CustomerID;
+
+Computed columns
+CREATE VIEW vw_ProductStockStatus AS
+SELECT ProductID, ProductName, Quantity,
+       CASE 
+           WHEN Quantity = 0 THEN 'Out of Stock'
+           WHEN Quantity < 10 THEN 'Low Stock'
+           ELSE 'In Stock'
+       END AS StockStatus
+FROM Products;
+
+View from a table, hiding some columns
+CREATE VIEW vw_PublicEmployeeInfo AS
+SELECT EmployeeID, FirstName, LastName, Department
+FROM Employees;
+-- Note: Salary, SSN, and other sensitive fields are not exposed.
+
+
+

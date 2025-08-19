@@ -1,0 +1,17 @@
+Create a database called Hospital
+Create two tables 
+1. Doctor (id int primary key, name nvarchar(50), specialityId int foreignkey(primary in Speciality)
+.... foreign key (spid) references speciality(id)
+
+2. Speciality (id primary key, name nvarchar(50)
+
+Alter table doctor to add Degree nvarchar(50)
+Alter table Speciality to add Description nvarchar(50)
+
+Alter table Speciality to drop description
+
+insert three records into Speciality
+Insert three records into doctor
+
+update the first speciality and change the name of the speciality
+update speciality set name ='' where id=1

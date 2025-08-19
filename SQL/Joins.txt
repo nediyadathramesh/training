@@ -1,0 +1,119 @@
+SQL Joins with Examples
+SQL joins are used to combine rows from two or more tables based on a related column. There are several types of joins:
+
+1. INNER JOIN
+Returns only matching records from both tables.
+
+Example:
+Tables:
+Employees
+
+EmpID	Name	DeptID
+1	John	101
+2	Emma	102
+3	Alex	103
+Departments
+
+DeptID	DeptName
+101	HR
+102	IT
+104	Finance
+Query:
+
+sql
+Copy
+Edit
+SELECT Employees.EmpID, Employees.Name, Departments.DeptName
+FROM Employees
+INNER JOIN Departments ON Employees.DeptID = Departments.DeptID;
+Output:
+
+EmpID	Name	DeptName
+1	John	HR
+2	Emma	IT
+2. LEFT JOIN (or LEFT OUTER JOIN)
+Returns all records from the left table and matching records from the right table. If there is no match, NULL values are returned.
+
+Query:
+
+sql
+Copy
+Edit
+SELECT Employees.EmpID, Employees.Name, Departments.DeptName
+FROM Employees
+LEFT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+Output:
+
+EmpID	Name	DeptName
+1	John	HR
+2	Emma	IT
+3	Alex	NULL
+3. RIGHT JOIN (or RIGHT OUTER JOIN)
+Returns all records from the right table and matching records from the left table. If there is no match, NULL values are returned.
+
+Query:
+
+sql
+Copy
+Edit
+SELECT Employees.EmpID, Employees.Name, Departments.DeptName
+FROM Employees
+RIGHT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+Output:
+
+EmpID	Name	DeptName
+1	John	HR
+2	Emma	IT
+NULL	NULL	Finance
+4. FULL JOIN (or FULL OUTER JOIN)
+Returns all records when there is a match in either the left or right table. If there is no match, NULL values are returned for missing records.
+
+Query:
+
+sql
+Copy
+Edit
+SELECT Employees.EmpID, Employees.Name, Departments.DeptName
+FROM Employees
+FULL JOIN Departments ON Employees.DeptID = Departments.DeptID;
+Output:
+
+EmpID	Name	DeptName
+1	John	HR
+2	Emma	IT
+3	Alex	NULL
+NULL	NULL	Finance
+5. CROSS JOIN
+Returns the Cartesian product of both tables (each row from the first table joins with all rows from the second table).
+
+Query:
+
+sql
+Copy
+Edit
+SELECT Employees.Name, Departments.DeptName
+FROM Employees
+CROSS JOIN Departments;
+Output:
+
+Name	DeptName
+John	HR
+John	IT
+John	Finance
+Emma	HR
+Emma	IT
+Emma	Finance
+Alex	HR
+Alex	IT
+Alex	Finance
+6. SELF JOIN
+A table joins with itself.
+
+Example: Finding employees with the same department.
+
+sql
+Copy
+Edit
+SELECT A.Name AS Employee1, B.Name AS Employee2, A.DeptID
+FROM Employees A
+JOIN Employees B ON A.DeptID = B.DeptID AND A.EmpID <> B.EmpID;

@@ -1,0 +1,34 @@
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'hris')
+BEGIN
+    CREATE DATABASE hris;
+    PRINT 'Database "hris" created.';
+END
+ELSE
+BEGIN
+    PRINT 'Database "hris" already exists.';
+END
+GO
+
+-- Use the hris database
+USE hris;
+GO
+
+-- Check if the 'employee' table exists in the current database
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_NAME = 'employee' AND TABLE_TYPE = 'BASE TABLE'
+)
+BEGIN
+    CREATE TABLE employee (
+        employee_id INT PRIMARY KEY,
+        first_name NVARCHAR(100),
+        last_name NVARCHAR(100),
+        hire_date DATE,
+        department NVARCHAR(100)
+    );
+    PRINT 'Table "employee" created.';
+END
+ELSE
+BEGIN
+    PRINT 'Table "employee" already exists.';
+END
