@@ -1,0 +1,17 @@
+Setting up dotnet core application using codefirst
+
+Create models
+Create context class
+create connection string in appsettings.json
+In program.cs file add to pipeline the dbcontext and usqsql
+5. add-migration -context RepoContext
+6. update-database -context RepoContext
+7. Migrate (update-database) for applicationdbcontext
+
+-------------------------------------------------------------
+
+Controller - 
+
+Index, GetById Create, Edit, Delete
+
+respective views.  Create views from the methods
